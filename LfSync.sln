@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "extract", "extract\extract.csproj", "{25DC5BF2-7574-4277-8447-522C2F58A618}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "transform", "transform\transform.csproj", "{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCModel", "LfSync.Data\LfSync.Data.csproj", "{41B92E0D-C291-418C-B36F-86E77105C7BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25DC5BF2-7574-4277-8447-522C2F58A618}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25DC5BF2-7574-4277-8447-522C2F58A618}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25DC5BF2-7574-4277-8447-522C2F58A618}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25DC5BF2-7574-4277-8447-522C2F58A618}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
