@@ -1,4 +1,5 @@
 
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Dynamic;
 
 namespace LfSync.Data.LCModel;
@@ -10,36 +11,43 @@ public partial class LfCmPossibility : LfCmObject
     /// Get the Name
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Name
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
     /// Get the Abbreviation
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Abbreviation
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
     /// Get the Description
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Description
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
+
+    //LfCmPossibilityList OwningList { get; set; }
+
+    //LfCmPossibility OwningPossibility { get; set; }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -48,10 +56,10 @@ public partial class LfCmPossibility : LfCmObject
     /// ------------------------------------------------------------------------------------
     public List<LfCmPossibility> SubPossibilitiesOS
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmPossibility>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -73,10 +81,10 @@ public partial class LfCmPossibility : LfCmObject
     /// ------------------------------------------------------------------------------------
     public List<LfCmPossibility> RestrictionsRC
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmPossibility>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -85,7 +93,7 @@ public partial class LfCmPossibility : LfCmObject
     /// <para>Indicates confidence in the data collected for this possibility item. This value comes from a user-defined list that is used by many different FieldWorks objects (Events, Analysis Records, Lexical Entries and their Senses, etc.) These values are user-definable and initially include: Low, Medium and High as possibilities.</para>
     /// </summary>
     /// ------------------------------------------------------------------------------------
-    public LfCmPossibility ConfidenceRA
+    public LfCmPossibility? ConfidenceRA
     {
         get;
         set;
@@ -98,7 +106,7 @@ public partial class LfCmPossibility : LfCmObject
     /// <para>The status of this Possibility. This is a user-definable list but initial list will include: Confirmed, Disproved, Pending.</para>
     /// </summary>
     /// ------------------------------------------------------------------------------------
-    public LfCmPossibility StatusRA
+    public LfCmPossibility? StatusRA
     {
         get;
         set;
@@ -148,10 +156,10 @@ public partial class LfCmPossibility : LfCmObject
     /// ------------------------------------------------------------------------------------
     public List<LfCmPerson> ResearchersRC
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmPerson>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -160,7 +168,7 @@ public partial class LfCmPossibility : LfCmObject
     /// <para>Used by the help system to launch the appropriate help topic for the Possibility item.</para>
     /// </summary>
     /// ------------------------------------------------------------------------------------
-    public string HelpId
+    public string? HelpId
     {
         get;
         set;
@@ -253,12 +261,13 @@ public partial class LfCmPerson : LfCmPossibility
     /// Get the Alias
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Alias
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -311,10 +320,10 @@ public partial class LfCmPerson : LfCmPossibility
     /// ------------------------------------------------------------------------------------
     public List<LfCmLocation> PlacesOfResidenceRC
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmLocation>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -345,10 +354,10 @@ public partial class LfCmPerson : LfCmPossibility
     /// ------------------------------------------------------------------------------------
     public List<LfCmPossibility> PositionsRC
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmPossibility>();
+    }
 
 }
 
@@ -359,11 +368,12 @@ public partial class LfCmLocation : LfCmPossibility
     /// Get the Alias
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Alias
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
 }

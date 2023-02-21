@@ -1,4 +1,7 @@
-﻿namespace LfSync.Data.LCModel;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LfSync.Data.LCModel;
 
 public partial class LfCmObject
 {
@@ -7,15 +10,15 @@ public partial class LfCmObject
     /// </summary>
     public int Hvo
     {
-        get;
+        get; set;
     }
 
     /// <summary>
     /// Object owner. (Null, if not owned.)
     /// </summary>
-    public LfCmObject Owner
+    public Guid Owner
     {
-        get;
+        get; set;
     }
 
     /// <summary>
@@ -23,7 +26,7 @@ public partial class LfCmObject
     /// </summary>
     public int OwningFlid
     {
-        get;
+        get; set;
     }
 
     /// <summary>
@@ -31,7 +34,7 @@ public partial class LfCmObject
     /// </summary>
     public int OwnOrd
     {
-        get;
+        get; set;
     }
 
     /// <summary>
@@ -39,15 +42,16 @@ public partial class LfCmObject
     /// </summary>
     public int ClassID
     {
-        get;
+        get; set;
     }
 
     /// <summary>
     /// Unique ID of the object. If this will hang around, prefer to use the Id.
     /// </summary>
+    [Key]
     public Guid Guid
     {
-        get;
+        get; set;
     }
 }
 
@@ -60,12 +64,13 @@ public partial class LfCmTranslation : LfCmObject
     /// <para>The signature is multiString allowing us to have translations in multiple languages (e.g. ENG, FRN, SPN). </para>
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Translation
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
@@ -87,12 +92,13 @@ public partial class LfCmTranslation : LfCmObject
     /// <para>A label to hold any kind of metadata about the Translation, in particular used for its status (as in “fresh” or “stale”, etc.). These labels can be stored and retrieved independently for each writing system and so correspond the parallel string in the Translation for each writing system. Different types of CmTranslations can have different sets of status labels according to the need of the type.</para>
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Status
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
 }
 
@@ -105,18 +111,20 @@ public partial class LfLexExampleSentence : LfCmObject
     /// <para>This multilingual attribute holds the vernacular example sentence. It is multilingual to allow multiple encodings in the same language (e.g., Thai, Laotian, and Vietnamese). It is multiString rather than multiUnicode to allow formatting - for example, applying bold to the word associated with the LexEntry.</para>
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Example
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfWsTsString>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
     /// Get or set the Reference
     /// </summary>
     /// ------------------------------------------------------------------------------------
+    [Column(TypeName = "jsonb")]
     public LfTsString Reference
     {
         get;
@@ -130,17 +138,17 @@ public partial class LfLexExampleSentence : LfCmObject
     /// ------------------------------------------------------------------------------------
     public List<LfCmTranslation> TranslationsOC
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmTranslation>();
+    }
 
     /// ------------------------------------------------------------------------------------
     /// <summary>
     /// Get or set the LiftResidue
     /// </summary>
     /// ------------------------------------------------------------------------------------
-    public string LiftResidue
+    public string? LiftResidue
     {
         get;
         set;
@@ -155,9 +163,9 @@ public partial class LfLexExampleSentence : LfCmObject
     /// ------------------------------------------------------------------------------------
     public List<LfCmPossibility> DoNotPublishInRC
     {
-        get;
+        get; set;
         // No "setter" property is needed.
         // One "gets" the accessor and uses that to work with the property.
-    } = new List<LfCmPossibility>();
+    }
 
 }
