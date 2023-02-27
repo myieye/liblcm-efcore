@@ -9,11 +9,23 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/transform/bin/Debug/net6.0/transform.dll",
+            "program": "${workspaceFolder}/transform/bin/Debug/net7.0/transform.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
-            "console": "internalConsole"
+            "console": "internalConsole",
+            "env": {
+                "COMPlus_ReadyToRun": "0" // .NET lib/sdk debugging - see below
+            },
+            // .NET lib/sdk debugging
+            // https://github.com/OmniSharp/omnisharp-vscode/wiki/Debugging-into-the-.NET-Framework-itself
+            "justMyCode": false,
+            //* symbolOptions tell the debugger to try to download symbols for external libs. After you have debugged and downloaded all the symbols that you need and are available, comment this out so the debugger doesn't keep looking for symbols that aren't available.
+            "symbolOptions": {
+                "searchMicrosoftSymbolServer": true,
+                "searchNuGetOrgSymbolServer": true
+            }, //*/
+            "suppressJITOptimizations": true,
         },
     ]
 }
