@@ -1,4 +1,4 @@
-namespace LfSync.Data.LCModel;
+namespace LfSync.Data.LCModel.old;
 
 /// <summary>
 /// Interface that allows several classes to be combined into one signature,
@@ -21,12 +21,4 @@ public class LfAnalysis : LfObject
     /// The associated WfiAnalysis, if any; returns null for WfiWordform, this for WfiAnalysis, owner for WfiGloss.
     /// </summary>
     public LfWfiAnalysis Analysis { get; set; }
-
-    /// <summary>
-    /// The form of the analysis, in the specified writing system if that is relevant.
-    /// This is the form of the wordform, for everything except punctuationForm.
-    /// </summary>
-    /// <param name="ws"></param>
-    /// <returns></returns>
-    //public LfTsString GetForm(int ws);
 }

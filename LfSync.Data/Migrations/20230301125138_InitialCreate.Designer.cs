@@ -14,7 +14,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LfSync.Data.Migrations
 {
     [DbContext(typeof(LibLCMDbContext))]
-    [Migration("20230227142109_InitialCreate")]
+    [Migration("20230301125138_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -2972,6 +2972,10 @@ namespace LfSync.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("Discriminator");
 
+                    b.Property<Guid?>("DiscussionOAGuid")
+                        .HasColumnType("uuid")
+                        .HasColumnName("DiscussionOAGuid");
+
                     b.Property<int>("ForeColor")
                         .HasColumnType("integer")
                         .HasColumnName("ForeColor");
@@ -3105,6 +3109,9 @@ namespace LfSync.Data.Migrations
 
                     b.HasIndex("ConfidenceRAGuid")
                         .HasDatabaseName("IX_Possibilities_ConfidenceRAGuid");
+
+                    b.HasIndex("DiscussionOAGuid")
+                        .HasDatabaseName("IX_Possibilities_DiscussionOAGuid");
 
                     b.HasIndex("LfLexEntryGuid")
                         .HasDatabaseName("IX_Possibilities_LexEntryGuid");
@@ -5502,6 +5509,11 @@ namespace LfSync.Data.Migrations
                         .HasForeignKey("ConfidenceRAGuid")
                         .HasConstraintName("FK_Possibilities_Possibilities_ConfidenceRAGuid");
 
+                    b.HasOne("LfSync.Data.LCModel.LfStText", "DiscussionOA")
+                        .WithMany()
+                        .HasForeignKey("DiscussionOAGuid")
+                        .HasConstraintName("FK_Possibilities_StText_DiscussionOATempId2");
+
                     b.HasOne("LfSync.Data.LCModel.LfLexEntry", null)
                         .WithMany("DialectLabelsRS")
                         .HasForeignKey("LfLexEntryGuid")
@@ -5603,6 +5615,8 @@ namespace LfSync.Data.Migrations
                         .HasConstraintName("FK_Possibilities_Possibilities_StatusRAGuid");
 
                     b.Navigation("ConfidenceRA");
+
+                    b.Navigation("DiscussionOA");
 
                     b.Navigation("StatusRA");
                 });
@@ -5709,7 +5723,7 @@ namespace LfSync.Data.Migrations
                     b.HasOne("LfSync.Data.LCModel.LfStText", null)
                         .WithMany("ParagraphsOS")
                         .HasForeignKey("LfStTextGuid")
-                        .HasConstraintName("FK_StPara_StText_StTextTempId2");
+                        .HasConstraintName("FK_StPara_StText_StTextTempId3");
                 });
 
             modelBuilder.Entity("LfSync.Data.LCModel.LfTextTag", b =>

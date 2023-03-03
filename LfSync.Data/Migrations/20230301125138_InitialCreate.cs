@@ -408,7 +408,7 @@ namespace LfSync.Data.Migrations
                 {
                     table.PrimaryKey("PK_StPara", x => x.Guid);
                     table.ForeignKey(
-                        name: "FK_StPara_StText_StTextTempId2",
+                        name: "FK_StPara_StText_StTextTempId3",
                         column: x => x.StTextGuid,
                         principalTable: "StText",
                         principalColumn: "Guid");
@@ -1648,6 +1648,7 @@ namespace LfSync.Data.Migrations
                     StatusRAGuid = table.Column<Guid>(type: "uuid", nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DateModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DiscussionOAGuid = table.Column<Guid>(type: "uuid", nullable: true),
                     HelpId = table.Column<string>(type: "text", nullable: true),
                     ForeColor = table.Column<int>(type: "integer", nullable: false),
                     BackColor = table.Column<int>(type: "integer", nullable: false),
@@ -1815,6 +1816,11 @@ namespace LfSync.Data.Migrations
                         name: "FK_Possibilities_PossibilityLists_PossibilityListTempId",
                         column: x => x.PossibilityListGuid,
                         principalTable: "PossibilityLists",
+                        principalColumn: "Guid");
+                    table.ForeignKey(
+                        name: "FK_Possibilities_StText_DiscussionOATempId2",
+                        column: x => x.DiscussionOAGuid,
+                        principalTable: "StText",
                         principalColumn: "Guid");
                     table.ForeignKey(
                         name: "FK_Possibility_FsFeatStruc_DefaultFeaturesOATempId1",
@@ -2787,6 +2793,11 @@ namespace LfSync.Data.Migrations
                 name: "IX_Possibilities_DefaultInflectionClassRAGuid",
                 table: "Possibilities",
                 column: "DefaultInflectionClassRAGuid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Possibilities_DiscussionOAGuid",
+                table: "Possibilities",
+                column: "DiscussionOAGuid");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Possibilities_EducationRAGuid",
@@ -3921,9 +3932,6 @@ namespace LfSync.Data.Migrations
                 name: "MoInflTemplateApp");
 
             migrationBuilder.DropTable(
-                name: "StText");
-
-            migrationBuilder.DropTable(
                 name: "PubHeader");
 
             migrationBuilder.DropTable(
@@ -3961,6 +3969,9 @@ namespace LfSync.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PossibilityLists");
+
+            migrationBuilder.DropTable(
+                name: "StText");
 
             migrationBuilder.DropTable(
                 name: "LexEntryRef");

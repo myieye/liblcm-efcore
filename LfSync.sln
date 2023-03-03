@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "transform", "transform\tran
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCModel", "LfSync.Data\LfSync.Data.csproj", "{41B92E0D-C291-418C-B36F-86E77105C7BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LfSync.LcmModelGenerator", "LfSync.LcmModelGenerator\LfSync.LcmModelGenerator.csproj", "{B4B4A641-BC64-4597-A772-634816B6D6E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41B92E0D-C291-418C-B36F-86E77105C7BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B4A641-BC64-4597-A772-634816B6D6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B4A641-BC64-4597-A772-634816B6D6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B4A641-BC64-4597-A772-634816B6D6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B4A641-BC64-4597-A772-634816B6D6E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

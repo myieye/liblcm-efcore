@@ -28,7 +28,7 @@ namespace LfSync.Data.LCModel
     [JsonPolymorphic(TypeDiscriminatorPropertyName = "$t")]
     [JsonDerivedType(typeof(IntTextProperty), typeDiscriminator: "int-prop")]
     [JsonDerivedType(typeof(StringTextProperty), typeDiscriminator: "string-prop")]
-    public class TextProperty
+    public abstract class TextProperty
     {
         public int Key { get; set; }
     }

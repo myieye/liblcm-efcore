@@ -24,25 +24,23 @@ public static class AutoMapperConfig
         var config = new MapperConfiguration(cfg =>
         {
             cfg.MapLibLCMToLF(services, wsManager);
-            cfg.MapLFToLibLCM(services, wsManager);
+            //cfg.MapLFToLibLCM(services, wsManager);
         });
         return config.CreateMapper();
     }
 
-    private static HashSet<object> setA = new HashSet<object>();
-    private static HashSet<object> setB = new HashSet<object>();
     public static void MapLibLCMToLF(this IMapperConfigurationExpression cfg, ILcmServiceLocator services, WritingSystemManager wsManager)
     {
         var lfTypes = AppDomain.CurrentDomain.GetAssemblies().Where(ass => ass.FullName.StartsWith("LfSync.Data"))
             .SelectMany(ass => ass.GetTypes())
             .Where(t => !t.IsEnum)
-            .Where(t => t.Namespace?.StartsWith(typeof(LfObject).Namespace) ?? false)
+            .Where(t => t.Namespace?.Equals(typeof(LfObject).Namespace) ?? false)
             .ToDictionary(t => t.Name, t => t);
 
         var lcmTypesByLfNames = AppDomain.CurrentDomain.GetAssemblies().Where(ass => ass.FullName.StartsWith("SIL.LCModel"))
             .SelectMany(ass => ass.GetTypes())
             .Where(t => !t.IsEnum)
-            .GroupBy(t => Regex.Replace(t.Name, "^(I(Cm)?)?", ""))
+            .GroupBy(t => LcmUtils.WithoutLcmPrefix(t.Name))
             .Where(t => lfTypes.ContainsKey(t.Key) || lfTypes.ContainsKey($"Lf{t.Key}"))
             .ToDictionary(g => lfTypes.ContainsKey(g.Key) ? g.Key : $"Lf{g.Key}", g =>
                 // Prefer the type with the fewest properties, because they contains the data.
@@ -63,11 +61,11 @@ public static class AutoMapperConfig
             var reverseMap = map.ReverseMap();
             if (!lcmType.IsValueType)
             {
-                map = map.PreserveReferences();
+                map.PreserveReferences();
                 reverseMap.PreserveReferences();
                 if (!lcmType.Name.Equals("ITsString")) // Error "Cannot include map in itself"
                 {
-                    map = map.IncludeAllDerived();
+                    map.IncludeAllDerived();
                     reverseMap.IncludeAllDerived();
                 }
 
@@ -85,10 +83,10 @@ public static class AutoMapperConfig
         }
 
         cfg.CreateMap<ICmObject, Guid?>().ConvertUsing(src => src == null ? null : src.Guid); // Owner
-        cfg.ValueTransformers.Add<DateTime>(date => // LibLCM uses Local, so we always flip-flop
-            date.Kind == DateTimeKind.Local ? DateTime.SpecifyKind(date, DateTimeKind.Utc)
-            : DateTime.SpecifyKind(date, DateTimeKind.Local));
-        //cfg.CreateMap(typeof(ILcmOwningCollection<>), typeof(List<>), MemberList.None); // seemed to be required at some point...
+        // DateTimeOffset
+        cfg.ValueTransformers.Add<DateTime>(date => // TODO: find out how DateTimes are stored in LibLCM uses Local, so we always flip-flop
+            date.Kind == DateTimeKind.Local ? date.ToUniversalTime() // 14:00 -> 14:00 UTC
+            : date.ToLocalTime()); // TODO is Utc .... is unspecified => Exception
         cfg.CreateMap<ITsTextProps?, List<TextProperty>>().ConvertUsing((src, dest) =>
         {
             var props = dest ?? new List<TextProperty>();
