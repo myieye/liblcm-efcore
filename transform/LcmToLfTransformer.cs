@@ -24,7 +24,10 @@ public partial class Program
 
     public static void Main(string[] args)
     {
+        /*
         GenerateModels();
+        return;
+        //*/
 
         var loadData = Stopwatch.StartNew();
         var project = args.Length > 0 ? args[0] : "Sena 3";
@@ -131,13 +134,25 @@ public partial class Program
             action();
         }
 
-        var output = new StringBuilder();
-        output.AppendLine("""
+        var models = new StringBuilder();
+        var context = new StringBuilder();
+        models.AppendLine("""
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LfSync.Data.LCModel;    
+namespace LfSync.Data.LCModel;
 
+""");
+        context.AppendLine("""
+using LfSync.Data.LCModel;
+using Microsoft.EntityFrameworkCore;
+
+namespace LfSync.Data.Db;
+
+public partial class LibLCMDbContext : DbContext
+{
+    partial void OnModelCreating_Generated(ModelBuilder modelBuilder)
+    {
 """);
 
         foreach (var clazzPair in classModels)
@@ -150,14 +165,14 @@ namespace LfSync.Data.LCModel;
 
             if (!string.IsNullOrWhiteSpace(clazz.TableName))
             {
-                output.AppendLine($"""
+                models.AppendLine($"""
 [Table("{clazz.TableName}")]
 """);
             }
 
             var _abstract = clazz.Abstract ? " abstract" : "";
             var _base = clazz.BaseClass != null ? $" : {clazz.BaseClass.Name}" : "";
-            output.AppendLine($$"""
+            models.AppendLine($$"""
 public{{_abstract}} class {{clazz.Name}}{{_base}}
 {
 """);
@@ -167,7 +182,7 @@ public{{_abstract}} class {{clazz.Name}}{{_base}}
                 {
                     foreach (var line in prop.Docs)
                     {
-                        output.AppendLine($"""
+                        models.AppendLine($"""
     /// {line}
 """);
                     }
@@ -175,7 +190,7 @@ public{{_abstract}} class {{clazz.Name}}{{_base}}
 
                 if (prop.ValueType == ValueType.Jsonb)
                 {
-                    output.AppendLine("""
+                    models.AppendLine("""
     [Column(TypeName = "jsonb")]
 """);
                 }
@@ -183,8 +198,14 @@ public{{_abstract}} class {{clazz.Name}}{{_base}}
                 {
                     if (prop.Cardinality == Cardinality.Many && !prop.IsOwner)
                     {
-                        output.AppendLine("""
+                        models.AppendLine("""
     // M:N
+""");
+                        context.AppendLine($"""
+        modelBuilder.Entity<{clazz.Name}>()
+            .HasMany(e => e.{prop.Name})
+            .WithMany()
+            .UsingEntity(j => j.ToTable($"{clazz.TableName}.{prop.Name}_{classModels[prop.Type].TableName}"));
 """);
                     }
                     else
@@ -193,15 +214,31 @@ public{{_abstract}} class {{clazz.Name}}{{_base}}
                         if (prop.Cardinality == Cardinality.One)
                         {
                             _fk = $"{prop.Name}{nameof(Guid)}";
-                            output.AppendLine($$"""
+                            models.AppendLine($$"""
     public Guid {{_fk}} { get; set; }
 """);
+                            if (!prop.IsOwner)
+                            {
+                                context.AppendLine($"""
+        modelBuilder.Entity<{clazz.Name}>()
+            .HasOne(e => e.{prop.Name})
+            .WithMany()
+            .HasForeignKey($"{clazz.TableName}Guid");
+""");
+                            }
                         }
                         else
                         {
                             _fk = $"{clazz.TableName}_{prop.Name}_{nameof(Guid)}";
-                            output.AppendLine($"""
+                            /*models.AppendLine($"""
     [ForeignKey("{_fk}")]
+""");*/
+                            context.AppendLine($"""
+        modelBuilder.Entity<{clazz.Name}>()
+            .HasMany(e => e.{prop.Name})
+            .WithOne()
+            .HasForeignKey($"{clazz.TableName}Guid")
+            .OnDelete(DeleteBehavior.Cascade);
 """);
                         }
                     }
@@ -209,22 +246,27 @@ public{{_abstract}} class {{clazz.Name}}{{_base}}
 
                 if (prop.IsPrimaryKey)
                 {
-                    output.AppendLine($"""
+                    models.AppendLine($"""
     [Key]
 """);
                 }
 
                 var _type = prop.Cardinality == Cardinality.One ? prop.Type : $"List<{prop.Type}>";
-                output.AppendLine($$"""
+                models.AppendLine($$"""
     public {{_type}} {{prop.Name}} { get; set; }
 
 """);
             }
-            output.AppendLine("""
+            models.AppendLine("""
 }
 
 """);
         }
+
+        context.AppendLine("""
+    }
+}
+""");
 
         AnalyzeRelations(classModels);
 
@@ -247,7 +289,8 @@ public{{_abstract}} class {{clazz.Name}}{{_base}}
 
         */
 
-        File.WriteAllText(@"D:\code\lf-sync\LfSync.Data\LCModel\LibLCM.Generated.cs", output.ToString());
+        File.WriteAllText(@"D:\code\lf-sync\LfSync.Data\LCModel\LibLCM.Generated.cs", models.ToString());
+        File.WriteAllText(@"D:\code\lf-sync\LfSync.Data\Db\LibLCMDbContext.Generated.cs", context.ToString());
 
         // basic = no FK annotation
         // owning + atomic = FK in curr class    - [ForeignKey("BlogForeignKey")] probably always a Guid

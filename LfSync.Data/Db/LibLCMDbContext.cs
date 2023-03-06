@@ -37,67 +37,74 @@ public partial class LibLCMDbContext : DbContext
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        configurationBuilder.Conventions.Add(_ => new GuidForeignKeyConvention());
+        //configurationBuilder.Conventions.Add(_ => new GuidForeignKeyConvention());
     }
+
+    partial void OnModelCreating_Generated(ModelBuilder modelBuilder);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Ignore<LfObject>();
-        modelBuilder.Ignore<LfTsString>();
-        modelBuilder.Entity<LfFsFeatureSpecification>()
-            .HasOne(f => f.Feature)
-            .WithMany();
-        modelBuilder.Entity<LfTranslation>()
-            .Property<Guid>("LexExampleSentence_Translations_Guid");
-        modelBuilder.Entity<LfPossibility>()
-            .Property<Guid>("PossibilityList_Possibilities_Guid");
-        //.HasForeignKey($"{nameof(LfFsFeatureSpecification.Feature)}{nameof(Guid)}");
+        OnModelCreating_Generated(modelBuilder);
+        // modelBuilder.Ignore<LfTsString>();
+        // modelBuilder.Entity<LfFsFeatureSpecification>()
+        //     .HasOne(f => f.Feature)
+        //     .WithMany();
+        // modelBuilder.Entity<LfTranslation>()
+        //     .Property<Guid>("LexExampleSentence_Translations_Guid");
         // modelBuilder.Entity<LfPossibilityList>()
         //     .HasMany(l => l.Possibilities)
         //     .WithOne()
-        //     .HasForeignKey($"PossibilityList{nameof(Guid)}");
-        modelBuilder.Entity<LfPossibility>()
-            .HasMany(l => l.SubPossibilities)
-            .WithOne();
-            //.HasForeignKey($"ParentPossibility{nameof(Guid)}");
-        modelBuilder.Entity<LfPossibility>()
-            .HasMany(l => l.Restrictions)
-            .WithMany()
-            .UsingEntity(j => j.ToTable($"{nameof(LfPossibility)}_{nameof(LfPossibility.Restrictions)}"));
-        modelBuilder.Entity<LfPossibility>()
-            .HasOne(l => l.Confidence)
-            .WithMany()
-            .HasForeignKey($"{nameof(LfPossibility.Confidence)}{nameof(Guid)}");
-        modelBuilder.Entity<LfPossibility>()
-            .HasOne(l => l.Status)
-            .WithMany();
-            //.HasForeignKey($"{nameof(LfPossibility.Status)}{nameof(Guid)}");
-        modelBuilder.Entity<LfPossibility>()
-            .HasMany(l => l.Researchers)
-            .WithMany()
-            .UsingEntity(j => j.ToTable($"{nameof(LfPossibility)}_{nameof(LfPossibility.Researchers)}"));
+        //     .HasForeignKey($"PossibilityList_Possibilities_Guid")
+        //     .OnDelete(DeleteBehavior.Cascade);
+        // //modelBuilder.Entity<LfPossibility>()
+        //   //  .Property<Guid>("PossibilityList_Possibilities_Guid");
+        // //.HasForeignKey($"{nameof(LfFsFeatureSpecification.Feature)}{nameof(Guid)}");
+        // // modelBuilder.Entity<LfPossibilityList>()
+        // //     .HasMany(l => l.Possibilities)
+        // //     .WithOne()
+        // //     .HasForeignKey($"PossibilityList{nameof(Guid)}");
+        // modelBuilder.Entity<LfPossibility>()
+        //     .HasMany(l => l.SubPossibilities)
+        //     .WithOne();
+        //     //.HasForeignKey($"ParentPossibility{nameof(Guid)}");
+        // modelBuilder.Entity<LfPossibility>()
+        //     .HasMany(l => l.Restrictions)
+        //     .WithMany()
+        //     .UsingEntity(j => j.ToTable($"{nameof(LfPossibility)}_{nameof(LfPossibility.Restrictions)}"));
+        // modelBuilder.Entity<LfPossibility>()
+        //     .HasOne(l => l.Confidence)
+        //     .WithMany()
+        //     .HasForeignKey($"{nameof(LfPossibility.Confidence)}{nameof(Guid)}");
+        // modelBuilder.Entity<LfPossibility>()
+        //     .HasOne(l => l.Status)
+        //     .WithMany();
+        //     //.HasForeignKey($"{nameof(LfPossibility.Status)}{nameof(Guid)}");
+        // modelBuilder.Entity<LfPossibility>()
+        //     .HasMany(l => l.Researchers)
+        //     .WithMany()
+        //     .UsingEntity(j => j.ToTable($"{nameof(LfPossibility)}_{nameof(LfPossibility.Researchers)}"));
 
-        modelBuilder.Entity<LfPerson>()
-            .HasOne(l => l.PlaceOfBirth)
-            .WithMany();
-        //     .HasForeignKey($"{nameof(LfPerson.PlaceOfBirth)}{nameof(Guid)}");
-        modelBuilder.Entity<LfPerson>()
-            .HasMany(l => l.PlacesOfResidence)
-            .WithMany();
-        //.UsingEntity(j => j.ToTable($"{nameof(LfCmPerson)}_{nameof(LfCmPerson.PlacesOfResidence)}"));
-        modelBuilder.Entity<LfPerson>()
-            .HasOne(l => l.Education)
-            .WithMany();
-        //     .HasForeignKey($"{nameof(LfPerson.Education)}{nameof(Guid)}");
-        modelBuilder.Entity<LfPerson>()
-            .HasMany(l => l.Positions)
-            .WithMany()
-            .UsingEntity(j => j.ToTable($"{nameof(LfPerson)}_{nameof(LfPerson.Positions)}"));
+        // modelBuilder.Entity<LfPerson>()
+        //     .HasOne(l => l.PlaceOfBirth)
+        //     .WithMany();
+        // //     .HasForeignKey($"{nameof(LfPerson.PlaceOfBirth)}{nameof(Guid)}");
+        // modelBuilder.Entity<LfPerson>()
+        //     .HasMany(l => l.PlacesOfResidence)
+        //     .WithMany();
+        // //.UsingEntity(j => j.ToTable($"{nameof(LfCmPerson)}_{nameof(LfCmPerson.PlacesOfResidence)}"));
+        // modelBuilder.Entity<LfPerson>()
+        //     .HasOne(l => l.Education)
+        //     .WithMany();
+        // //     .HasForeignKey($"{nameof(LfPerson.Education)}{nameof(Guid)}");
+        // modelBuilder.Entity<LfPerson>()
+        //     .HasMany(l => l.Positions)
+        //     .WithMany()
+        //     .UsingEntity(j => j.ToTable($"{nameof(LfPerson)}_{nameof(LfPerson.Positions)}"));
 
-        modelBuilder.Entity<LfLexExampleSentence>()
-            .HasMany(e => e.DoNotPublishIn)
-            .WithMany()
-            .UsingEntity(j => j.ToTable($"{nameof(LfLexExampleSentence)}_{nameof(LfLexExampleSentence.DoNotPublishIn)}"));
+        // modelBuilder.Entity<LfLexExampleSentence>()
+        //     .HasMany(e => e.DoNotPublishIn)
+        //     .WithMany()
+        //     .UsingEntity(j => j.ToTable($"{nameof(LfLexExampleSentence)}_{nameof(LfLexExampleSentence.DoNotPublishIn)}"));
 
     }
 
@@ -127,15 +134,5 @@ public partial class LibLCMDbContext : DbContext
         num += base.SaveChanges(acceptAllChangesOnSuccess);
         transation.Commit();
         return num;
-    }
-}
-
-public class GuidForeignKeyConvention : IForeignKeyAddedConvention
-{
-    public void ProcessForeignKeyAdded(
-        IConventionForeignKeyBuilder foreignKeyBuilder,
-        IConventionContext<IConventionForeignKeyBuilder> context)
-    {
-        foreignKeyBuilder.HasForeignKey(...)
     }
 }

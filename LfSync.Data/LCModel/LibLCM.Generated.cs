@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LfSync.Data.LCModel;    
+namespace LfSync.Data.LCModel;
 
 [Table("Object")]
 public class LfObject
@@ -79,13 +79,11 @@ public class LfFolder : LfObject
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Name { get; set; }
 
-    [ForeignKey("Folder_SubFolders_Guid")]
     public List<LfFolder> SubFolders { get; set; }
 
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Description { get; set; }
 
-    [ForeignKey("Folder_Files_Guid")]
     public List<LfFile> Files { get; set; }
 
 }
@@ -121,14 +119,12 @@ public abstract class LfMajorObject : LfObject
     /// <summary>
     /// A collection of all of the publication layouts available for output from the translated scripture database.
     /// </summary>
-    [ForeignKey("_Publications_Guid")]
     public List<LfPublication> Publications { get; set; }
 
     /// <summary>
     /// Used to define preset header/footer layouts that can be selected and copied to a publication division.
     /// Reason: needed to implement TE-1468
     /// </summary>
-    [ForeignKey("_HeaderFooterSets_Guid")]
     public List<LfPubHFSet> HeaderFooterSets { get; set; }
 
 }
@@ -144,7 +140,6 @@ public class LfSegment : LfObject
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> LiteralTranslation { get; set; }
 
-    [ForeignKey("Segment_Notes_Guid")]
     public List<LfNote> Notes { get; set; }
 
     // M:N
@@ -201,7 +196,6 @@ public class LfPossibility : LfObject
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Description { get; set; }
 
-    [ForeignKey("Possibility_SubPossibilities_Guid")]
     public List<LfPossibility> SubPossibilities { get; set; }
 
     public int SortSpec { get; set; }
@@ -292,7 +286,6 @@ public class LfPossibilityList : LfMajorObject
 
     public Boolean PreventNodeChoices { get; set; }
 
-    [ForeignKey("PossibilityList_Possibilities_Guid")]
     public List<LfPossibility> Possibilities { get; set; }
 
     [Column(TypeName = "jsonb")]
@@ -355,7 +348,6 @@ public class LfFilter : LfObject
 
     public int Type { get; set; }
 
-    [ForeignKey("Filter_Rows_Guid")]
     public List<LfRow> Rows { get; set; }
 
     public string ColumnInfo { get; set; }
@@ -369,7 +361,6 @@ public class LfFilter : LfObject
 [Table("Row")]
 public class LfRow : LfObject
 {
-    [ForeignKey("Row_Cells_Guid")]
     public List<LfCell> Cells { get; set; }
 
 }
@@ -422,7 +413,6 @@ public class LfPerson : LfPossibility
 [Table("StText")]
 public class LfStText : LfObject
 {
-    [ForeignKey("StText_Paragraphs_Guid")]
     public List<LfStPara> Paragraphs { get; set; }
 
     /// <summary>
@@ -430,7 +420,6 @@ public class LfStText : LfObject
     /// </summary>
     public Boolean RightToLeft { get; set; }
 
-    [ForeignKey("StText_Tags_Guid")]
     public List<LfTextTag> Tags { get; set; }
 
     public DateTime DateModified { get; set; }
@@ -483,16 +472,13 @@ public class LfStTxtPara : LfStPara
     /// Refer to the documentation on TxtWordformInContext for more information.
     /// This attribute is used only if the application requires it. It does not obviate the need for TextObjects
     /// </summary>
-    [ForeignKey("StPara_AnalyzedTextObjects_Guid")]
     public List<LfObject> AnalyzedTextObjects { get; set; }
 
-    [ForeignKey("StPara_Segments_Guid")]
     public List<LfSegment> Segments { get; set; }
 
     /// <summary>
     /// Refer to the documentation on LpTranslation.
     /// </summary>
-    [ForeignKey("StPara_Translations_Guid")]
     public List<LfTranslation> Translations { get; set; }
 
 }
@@ -1012,7 +998,6 @@ public class LfPublication : LfObject
     /// <summary>
     /// The content divisions (i.e. sections) that determine overall content of the publication.
     /// </summary>
-    [ForeignKey("Publication_Divisions_Guid")]
     public List<LfPubDivision> Divisions { get; set; }
 
     /// <summary>
@@ -1299,10 +1284,8 @@ public class LfPicture : LfObject
 [Table("FsFeatureSystem")]
 public class LfFsFeatureSystem : LfObject
 {
-    [ForeignKey("FsFeatureSystem_Types_Guid")]
     public List<LfFsFeatStrucType> Types { get; set; }
 
-    [ForeignKey("FsFeatureSystem_Features_Guid")]
     public List<LfFsFeatDefn> Features { get; set; }
 
 }
@@ -1310,7 +1293,6 @@ public class LfFsFeatureSystem : LfObject
 [Table("FsClosedFeature")]
 public class LfFsClosedFeature : LfFsFeatDefn
 {
-    [ForeignKey("FsClosedFeature_Values_Guid")]
     public List<LfFsSymFeatVal> Values { get; set; }
 
 }
@@ -1414,10 +1396,8 @@ public abstract class LfFsFeatureSpecification : LfObject
 [Table("FsFeatStruc")]
 public class LfFsFeatStruc : LfFsAbstractStructure
 {
-    [ForeignKey("FsFeatStruc_FeatureDisjunctions_Guid")]
     public List<LfFsFeatStrucDisj> FeatureDisjunctions { get; set; }
 
-    [ForeignKey("FsFeatStruc_FeatureSpecs_Guid")]
     public List<LfFsFeatureSpecification> FeatureSpecs { get; set; }
 
     public Guid TypeGuid { get; set; }
@@ -1428,7 +1408,6 @@ public class LfFsFeatStruc : LfFsAbstractStructure
 [Table("FsFeatStrucDisj")]
 public class LfFsFeatStrucDisj : LfFsAbstractStructure
 {
-    [ForeignKey("FsFeatStrucDisj_Contents_Guid")]
     public List<LfFsFeatStruc> Contents { get; set; }
 
 }
@@ -1570,7 +1549,6 @@ public class LfSemanticDomain : LfPossibility
     /// <summary>
     /// Each domain has a list of questions used to elicit words. Each question has sample words and sentences, so we group these together into CmDomainQ. The domain then owns a sequence of these. They need to be ordered since important questions come first.
     /// </summary>
-    [ForeignKey("Possibility_Questions_Guid")]
     public List<LfDomainQ> Questions { get; set; }
 
 }
@@ -1694,7 +1672,6 @@ public class LfMediaContainer : LfObject
 {
     public string OffsetType { get; set; }
 
-    [ForeignKey("MediaContainer_MediaURIs_Guid")]
     public List<LfMediaURI> MediaURIs { get; set; }
 
 }
@@ -1705,7 +1682,6 @@ public class LfScripture : LfMajorObject
     /// <summary>
     /// The Scripture object is a container for an ordered collection of ScrBooks (Scripture Books).
     /// </summary>
-    [ForeignKey("Scripture_ScriptureBooks_Guid")]
     public List<LfScrBook> ScriptureBooks { get; set; }
 
     /// <summary>
@@ -1715,7 +1691,6 @@ public class LfScripture : LfMajorObject
     /// a. utilize styles that are specific for Scripture use;
     /// b. avoid conflicts with the LangProject style sheet if, for example, a Style named 'Paragraph' is desired for both general documents and Scripture
     /// </summary>
-    [ForeignKey("Scripture_Styles_Guid")]
     public List<LfStStyle> Styles { get; set; }
 
     /// <summary>
@@ -1741,10 +1716,8 @@ public class LfScripture : LfMajorObject
     /// <summary>
     /// Scripture Import Settings. Supports multiple configurations for importing Scripture and related data from external files.
     /// </summary>
-    [ForeignKey("Scripture_ImportSettings_Guid")]
     public List<LfScrImportSet> ImportSettings { get; set; }
 
-    [ForeignKey("Scripture_ArchivedDrafts_Guid")]
     public List<LfScrDraft> ArchivedDrafts { get; set; }
 
     /// <summary>
@@ -1813,7 +1786,6 @@ public class LfScripture : LfMajorObject
     /// <summary>
     ///  Book-by-book sequence of annotations that are specific to the scripture text. As of January 2006, these are just scripture notes. We have not yet decided whether to store the annotations generated by checking tools here Scripture annotations are stored book-by-book to make for faster access and filtering.
     /// </summary>
-    [ForeignKey("Scripture_BookAnnotations_Guid")]
     public List<LfScrBookAnnotations> BookAnnotations { get; set; }
 
     /// <summary>
@@ -1871,7 +1843,6 @@ public class LfScripture : LfMajorObject
     /// <summary>
     /// The named external resources (e.g. xml files) used by Translation Editor and their version numbers.
     /// </summary>
-    [ForeignKey("Scripture_Resources_Guid")]
     public List<LfResource> Resources { get; set; }
 
 }
@@ -1882,7 +1853,6 @@ public class LfScrBook : LfObject
     /// <summary>
     /// A ScrBook is made up of ScrSections. ScrSections represent short passages of Scripture. For example, Matthew 1:1-17 in the NIV is a ScrSection with a heading of "The Genealogy of Jesus."
     /// </summary>
-    [ForeignKey("ScrBook_Sections_Guid")]
     public List<LfScrSection> Sections { get; set; }
 
     /// <summary>
@@ -1917,10 +1887,8 @@ public class LfScrBook : LfObject
     /// </summary>
     public string IdText { get; set; }
 
-    [ForeignKey("ScrBook_Footnotes_Guid")]
     public List<LfScrFootnote> Footnotes { get; set; }
 
-    [ForeignKey("ScrBook_Diffs_Guid")]
     public List<LfScrDifference> Diffs { get; set; }
 
     /// <summary>
@@ -1949,7 +1917,6 @@ public class LfScrBook : LfObject
 [Table("ScrRefSystem")]
 public class LfScrRefSystem : LfObject
 {
-    [ForeignKey("ScrRefSystem_Books_Guid")]
     public List<LfScrBookRef> Books { get; set; }
 
 }
@@ -2055,31 +2022,26 @@ public class LfScrImportSet : LfObject
     /// <summary>
     /// Currently (Dec 2005) a single source for scripture is suported but this is made a collection to make future expansion feasible.
     /// </summary>
-    [ForeignKey("ScrImportSet_ScriptureSources_Guid")]
     public List<LfScrImportSource> ScriptureSources { get; set; }
 
     /// <summary>
     /// Sources for scripture back translations. More than one is used only if back translations are written in diverse analysis languages.
     /// </summary>
-    [ForeignKey("ScrImportSet_BackTransSources_Guid")]
     public List<LfScrImportSource> BackTransSources { get; set; }
 
     /// <summary>
     /// Sources for annotations. Different sources are useful to group different kinds of annotations and/or different originators.
     /// </summary>
-    [ForeignKey("ScrImportSet_NoteSources_Guid")]
     public List<LfScrImportSource> NoteSources { get; set; }
 
     /// <summary>
     /// The mappings (from delimited external data to internal data structure) that apply to the scripture and back translations sources in this group fo settings. Markers used in both the scripture and back translations sources must be used equivalently within an instance of ScrImportSettings, so one collection of mappings is used for both types of sources.
     /// </summary>
-    [ForeignKey("ScrImportSet_ScriptureMappings_Guid")]
     public List<LfScrMarkerMapping> ScriptureMappings { get; set; }
 
     /// <summary>
     /// The mappings (from delimited external data to internal data structure) that apply to the annotations sources in this group of settings. Markers in the various annotation sources must be compatible within an instance of ScrImportSettings so one collection of mappings is used for all note sources.
     /// </summary>
-    [ForeignKey("ScrImportSet_NoteMappings_Guid")]
     public List<LfScrMarkerMapping> NoteMappings { get; set; }
 
 }
@@ -2089,7 +2051,6 @@ public class LfScrDraft : LfObject
 {
     public string Description { get; set; }
 
-    [ForeignKey("ScrDraft_Books_Guid")]
     public List<LfScrBook> Books { get; set; }
 
     /// <summary>
@@ -2182,7 +2143,6 @@ public class LfScrImportSFFiles : LfScrImportSource
     /// <summary>
     /// The files that this source comprises. Currently (Dec 2005) plan to only set the OriginalPath in the CmFile.
     /// </summary>
-    [ForeignKey("ScrImportSource_Files_Guid")]
     public List<LfFile> Files { get; set; }
 
 }
@@ -2247,13 +2207,11 @@ public class LfScrBookAnnotations : LfObject
     /// <summary>
     /// Scripture notes for this book of Scripture. These annotations include consultant notes, translator notes and also "error" annotations generated by checking tools.
     /// </summary>
-    [ForeignKey("ScrBookAnnotations_Notes_Guid")]
     public List<LfScrScriptureNote> Notes { get; set; }
 
     /// <summary>
     /// Records the date and results of the latest run of each check
     /// </summary>
-    [ForeignKey("ScrBookAnnotations_ChkHistRecs_Guid")]
     public List<LfScrCheckRun> ChkHistRecs { get; set; }
 
 }
@@ -2299,7 +2257,6 @@ public class LfScrScriptureNote : LfBaseAnnotation
     /// <summary>
     /// Place to record discussion between the stakeholders in response to the note. In consultant notes, a two-way interchange between the consultant and consultee.
     /// </summary>
-    [ForeignKey("Annotation_Responses_Guid")]
     public List<LfStJournalText> Responses { get; set; }
 
     /// <summary>
@@ -2351,13 +2308,11 @@ public class LfRnResearchNbk : LfMajorObject
     /// <summary>
     /// A collection containing all of the top-level records in the notebook. (Keep in mind that records can contain records, so that this attribute only contains the top-level records.) This is the main content attribute of the notebook.
     /// </summary>
-    [ForeignKey("RnResearchNbk_Records_Guid")]
     public List<LfRnGenericRec> Records { get; set; }
 
     /// <summary>
     /// At a global level, the user can use this attribute to view all of the reminders that have been made within the individual records. (The view will presumably permit ordering (and/or sorting) and filtering of these reminders, in support of creating printouts that can help guide further work or elicitation.)
     /// </summary>
-    [ForeignKey("RnResearchNbk_Reminders_Guid")]
     public List<LfReminder> Reminders { get; set; }
 
     /// <summary>
@@ -2369,7 +2324,6 @@ public class LfRnResearchNbk : LfMajorObject
     /// <summary>
     /// CrossReference objects that capture crossReferences between two RnGenericRecords are owned here by the ResearchNotebook.
     /// </summary>
-    [ForeignKey("RnResearchNbk_CrossReferences_Guid")]
     public List<LfCrossReference> CrossReferences { get; set; }
 
 }
@@ -2427,7 +2381,6 @@ public class LfRnGenericRec : LfObject
     /// <summary>
     /// A collection of lower-level records. This permits a hierarchical grouping of records (e.g., all of the records dealing with Emilio and Maria's Wedding.) By placing this attribute at the RnGenericRecord level, we are making the claim that any type of record can have subrecords. Thus, for example, a Formal Interview might include some Observations that happened during the interview; a Performance Record might include several formal interviews about the performance; a Cartographic Record might include Reports on Conversations that helped in creating the map.
     /// </summary>
-    [ForeignKey("RnGenericRec_SubRecords_Guid")]
     public List<LfRnGenericRec> SubRecords { get; set; }
 
     /// <summary>
@@ -2545,7 +2498,6 @@ public class LfRnGenericRec : LfObject
     /// <summary>
     /// A list of roles involved in the event and the participants who fill those roles. The user can specify participants directly in which case their role is assigned as unspecified.
     /// </summary>
-    [ForeignKey("RnGenericRec_Participants_Guid")]
     public List<LfRnRoledPartic> Participants { get; set; }
 
     /// <summary>
@@ -2666,13 +2618,11 @@ public class LfLexEntry : LfObject
 
     public DateTime DateModified { get; set; }
 
-    [ForeignKey("LexEntry_MorphoSyntaxAnalyses_Guid")]
     public List<LfMoMorphSynAnalysis> MorphoSyntaxAnalyses { get; set; }
 
     /// <summary>
     /// I am not currently sure whether senses belong on minor entries or not but we did allow this in LinguaLinks so I will leave it here for now for compatibility's sake.
     /// </summary>
-    [ForeignKey("LexEntry_Senses_Guid")]
     public List<LfLexSense> Senses { get; set; }
 
     /// <summary>
@@ -2684,7 +2634,6 @@ public class LfLexEntry : LfObject
     /// <summary>
     /// Each entry may have multiple etymology specifications.
     /// </summary>
-    [ForeignKey("LexEntry_Etymology_Guid")]
     public List<LfLexEtymology> Etymology { get; set; }
 
     /// <summary>
@@ -2737,13 +2686,11 @@ public class LfLexEntry : LfObject
     /// <summary>
     /// This holds alternate forms, or allomorphs, in addition to the lexeme form. The lexeme form is also an allomorph if it is not abstract. These forms along with the lexeme form (when not abstract) are used by the parser.
     /// </summary>
-    [ForeignKey("LexEntry_AlternateForms_Guid")]
     public List<LfMoForm> AlternateForms { get; set; }
 
     /// <summary>
     /// We may need more than one pronunciation per entry. For example either/neither have two different pronunciations. Some people may want to order these based on frequency of use, so it is a sequence instead of a collection.
     /// </summary>
-    [ForeignKey("LexEntry_Pronunciations_Guid")]
     public List<LfLexPronunciation> Pronunciations { get; set; }
 
     /// <summary>
@@ -2759,7 +2706,6 @@ public class LfLexEntry : LfObject
     /// <summary>
     /// This property is empty for main entries. For variant and complex entries, one or more LexEntryRef is used to point to the major entries. One variant entry could apply to more than one main entry, so each one could have a separate LexEntryRef. It’s possible for an entry to be a complex entry as well as a variant. This could be represented by one or more LexEntryRefs. Some may want to order multiple entries in a particular way, so we have a sequence instead of a collection.
     /// </summary>
-    [ForeignKey("LexEntry_EntryRefs_Guid")]
     public List<LfLexEntryRef> EntryRefs { get; set; }
 
     /// <summary>
@@ -2794,7 +2740,6 @@ public class LfConstChartRow : LfObject
 
     public Boolean EndDependentClauseGroup { get; set; }
 
-    [ForeignKey("ConstChartRow_Cells_Guid")]
     public List<LfConstituentChartCellPart> Cells { get; set; }
 
     public String Label { get; set; }
@@ -2812,7 +2757,6 @@ public class LfLexExampleSentence : LfObject
 
     public String Reference { get; set; }
 
-    [ForeignKey("LexExampleSentence_Translations_Guid")]
     public List<LfTranslation> Translations { get; set; }
 
     public string LiftResidue { get; set; }
@@ -2828,7 +2772,6 @@ public class LfLexExampleSentence : LfObject
 [Table("LexDb")]
 public class LfLexDb : LfMajorObject
 {
-    [ForeignKey("LexDb_Appendixes_Guid")]
     public List<LfLexAppendix> Appendixes { get; set; }
 
     public Guid SenseTypesGuid { get; set; }
@@ -2862,7 +2805,6 @@ public class LfLexDb : LfMajorObject
     /// <summary>
     /// Ken Zook: We are pretty well beyond the point where we'll ever allow multiple language projects in a database, so I think it's time we make these indexes owned. Since they are really part of the lexical database, I'm recommending they be owned by the lexical database.
     /// </summary>
-    [ForeignKey("LexDb_ReversalIndexes_Guid")]
     public List<LfReversalIndex> ReversalIndexes { get; set; }
 
     /// <summary>
@@ -2874,7 +2816,6 @@ public class LfLexDb : LfMajorObject
     /// <summary>
     /// The named external resources (e.g. xml files) used by FLEX and their version numbers.
     /// </summary>
-    [ForeignKey("LexDb_Resources_Guid")]
     public List<LfResource> Resources { get; set; }
 
     /// <summary>
@@ -3045,7 +2986,6 @@ public class LfLexPronunciation : LfObject
     /// <summary>
     /// A pronunciation may have more than one media file to allow for a man's voice and a woman's voice, slight dialect differences, etc.
     /// </summary>
-    [ForeignKey("LexPronunciation_MediaFiles_Guid")]
     public List<LfMedia> MediaFiles { get; set; }
 
     /// <summary>
@@ -3077,7 +3017,6 @@ public class LfLexSense : LfObject
     // M:N
     public List<LfAnthroItem> AnthroCodes { get; set; }
 
-    [ForeignKey("LexSense_Senses_Guid")]
     public List<LfLexSense> Senses { get; set; }
 
     // M:N
@@ -3092,7 +3031,6 @@ public class LfLexSense : LfObject
     // M:N
     public List<LfPossibility> DomainTypes { get; set; }
 
-    [ForeignKey("LexSense_Examples_Guid")]
     public List<LfLexExampleSentence> Examples { get; set; }
 
     [Column(TypeName = "jsonb")]
@@ -3147,7 +3085,6 @@ public class LfLexSense : LfObject
     // M:N
     public List<LfSemanticDomain> SemanticDomains { get; set; }
 
-    [ForeignKey("LexSense_Pictures_Guid")]
     public List<LfPicture> Pictures { get; set; }
 
     /// <summary>
@@ -3169,7 +3106,6 @@ public class LfLexSense : LfObject
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> UsageNote { get; set; }
 
-    [ForeignKey("LexSense_ExtendedNote_Guid")]
     public List<LfLexExtendedNote> ExtendedNote { get; set; }
 
     /// <summary>
@@ -3266,13 +3202,11 @@ public class LfMoAffixProcess : LfMoAffixForm
     /// Owns an ordered seq of PhContextOrVar, describing the form of the stem to which the affix attaches. The left-to-right order of the PhContextOrVars in this attribute corresponds to the order of the portions of the input word which match. (N.B.: There could be ambiguity, for instance if the input had two adjacent PhVariables. The system should check for this, and warn the user.)
     /// Given that PhContextOrVar can itself own an PhSequenceContext, the use of a seq attribute here may seem like overkill. However, it is only the topmost members of this Input attribute that can be numbered (the numbering is part of the user interface, and allows the user to point back to particular pieces of the input for the output). Perhaps this numbering can be done differently, in which case the Input attribute won't need to be seq.
     /// </summary>
-    [ForeignKey("MoAffixForm_Input_Guid")]
     public List<LfPhContextOrVar> Input { get; set; }
 
     /// <summary>
     /// Owns an ordered seq of MoRuleMapping, describing the form output by attachment of this affix. Typically this consists of a copy of the Input plus some constant for the affix, but reduplication, infixation, simulfixes and suprafixes will be more complex. The left-to-right order of the MoRuleMapping objects in this attribute corresponds to the order of the pieces of the output word which will be constructed by the rule.
     /// </summary>
-    [ForeignKey("MoAffixForm_Output_Guid")]
     public List<LfMoRuleMapping> Output { get; set; }
 
 }
@@ -3654,13 +3588,11 @@ public class LfMoInflClass : LfObject
     /// <summary>
     /// owns a collection of MoInflectionClasses, each of which is a specialization of this Inflection Class. Part of the S2W process is decreasing the number of inflection classes by pushing identical information in subclasses up into the parent inflection class, and by accounting for differences among subclasses in other ways (e.g. as phonologically predictable allomorphy, or by features such as gender that are not among the PartOfSpeech.InflectableFeatures attribute of the owner).
     /// </summary>
-    [ForeignKey("MoInflClass_Subclasses_Guid")]
     public List<LfMoInflClass> Subclasses { get; set; }
 
     /// <summary>
     /// owns a sequence of MoReferralRule. Like the attribute pRulesOfReferral in the class PartOfSpeech, except that rules of referral which are owned by the PartOfSpeech hold for all lexemes of that part of speech (regardless of inflection class), whereas rules of referral owned by this class hold only for lexemes of a particular class. (In Stump's (1993a) notation, the latter case corresponds to indicating a 'CLASS' for the Referral Rule.)
     /// </summary>
-    [ForeignKey("MoInflClass_RulesOfReferral_Guid")]
     public List<LfMoReferralRule> RulesOfReferral { get; set; }
 
     /// <summary>
@@ -3668,14 +3600,12 @@ public class LfMoInflClass : LfObject
     /// The MoStemNames are interpreted as a disjunctively ordered list, i.e. in selecting a Stem for a given word, the list of StemNames is searched linearly, stopping at the first one for which one of its cells unifies with the FsFeatStruc of the word to be derived (see Choosing a Stem Allomorph). The order of the MoStemNames in this attribute is therefore important.
     /// If this attribute is empty, it defaults to the value of the same attribute in its owner. This allows e.g. defining a set of stem names for all verbs, and inheriting those names for all inflection classes of verb (as well as for all subcategories of verb). It should probably be possible to block such inheritance without specifying any stem names, so there needs to be some specified value for that ('nil', say).
     /// </summary>
-    [ForeignKey("MoInflClass_StemNames_Guid")]
     public List<LfMoStemName> StemNames { get; set; }
 
     /// <summary>
     /// ReferenceForms: owns a collection of FsFeatStruc, each of which defines the cell whose inflection uniquely picks out an inflection class. (Cf. Carstairs-McCarthy 1991, particularly section 8). Usually, the reference forms belonging to a PartOfSpeech will suffice for all the MoInflectionClasses, i.e. a single "Primary Reference Form" (Carstairs-McCarthy's term). In some cases, however, it may prove necessary to provide a secondary reference form to distinguish among "mixed" classes (see again the discussion in Carstairs-McCarthy 1991.) This attr is then where the secondary reference form would be stored. The classes which need to be distinguished by ReferenceForms will presumably constitute the members of the Subclasses attr of some parent inflection class, together with that parent inflection class. The appropriate class to list the ReferenceForms will then be that parent class, and the daughter classes will inherit that property via their vAllReferenceForms (see below).
     /// Note that this attribute performs no particular function in any of the algorithms used for computing affixed forms. However, it may be useful in the context of a dictionary, e.g. for providing principal parts.
     /// </summary>
-    [ForeignKey("MoInflClass_ReferenceForms_Guid")]
     public List<LfFsFeatStruc> ReferenceForms { get; set; }
 
 }
@@ -3686,19 +3616,16 @@ public class LfMoMorphData : LfObject
     /// <summary>
     /// owns a col of MoStratum objects, in order from shallowest to deepest.
     /// </summary>
-    [ForeignKey("MoMorphData_Strata_Guid")]
     public List<LfMoStratum> Strata { get; set; }
 
     /// <summary>
     /// owns a seq of MoCompoundRules. (Alternatively, these could be owned in the stratum to which they belong - see MoStratum.vCompoundRules for discussion.) The order corresponds to the order in which the compounding rules apply in a derivation.
     /// </summary>
-    [ForeignKey("MoMorphData_CompoundRules_Guid")]
     public List<LfMoCompoundRule> CompoundRules { get; set; }
 
     /// <summary>
     /// Used to hold the list of ad hoc cooccurrence restrictions. (Ideally, this is empty!)
     /// </summary>
-    [ForeignKey("MoMorphData_AdhocCoProhibitions_Guid")]
     public List<LfMoAdhocProhib> AdhocCoProhibitions { get; set; }
 
     // M:N
@@ -3707,7 +3634,6 @@ public class LfMoMorphData : LfObject
     /// <summary>
     /// WfiWordSets are a collection of words that the user might want to use to test his word grammar as he adjusts morphological rules and the lexicon.
     /// </summary>
-    [ForeignKey("MoMorphData_TestSets_Guid")]
     public List<LfWfiWordSet> TestSets { get; set; }
 
     public Guid GlossSystemGuid { get; set; }
@@ -3867,7 +3793,6 @@ public class LfMoStemName : LfObject
     /// owns a collection of FsFeatStrucs. Conceptually, this is analogous to MoInflectionalAffixMsa.InflectionalFeatures, defining the parts of the paradigm that use this stem. However, unlike an inflectional affix, it is possible for a stem to have more than one FsFeatStruc and therefore pertain to more than one contiguous region of a paradigm, i.e. a stem need have no particular (or at least no consistent) semantics over and above the semantics of the lexeme it belongs to. (Again, see Aronoff 1992.) An example is the '1sg/subj' stem which for many Spanish verbs is used for the past subjunctive and the 1sg present indicative, such as teng- 'have'.
     /// In addition to being relevant to one or more regions of a paradigm, a stem may be relevant to derivational morphology. This is indicated in the model by referencing the MoStemName from the MoDerivationalAffixMsa.
     /// </summary>
-    [ForeignKey("MoStemName_Regions_Guid")]
     public List<LfFsFeatStruc> Regions { get; set; }
 
     /// <summary>
@@ -3936,7 +3861,6 @@ public class LfPartOfSpeech : LfPossibility
     /// <summary>
     /// owns a collection seq of FsFeatStruc, indicating the cells (feature-value combinations) which are disallowed in the paradigm. This is intended to account for defective paradigms, which are not common (e.g. deponent verbs in Greek, which are verbs that have no active forms). Since defective paradigms are relatively rare, this will probably be a seldom-used attribute. It is not intended to account for syncretism in the paradigm, i.e. the situation where one cell 'uses' the affixes of another cell (for which MoReferralRules are supplied instead, should disjunctive ordering of the affixes in an MoInflAffixSlot not suffice.).Since this attribute is defined at the level of the part of speech, it is not possible to define cells which are empty in only one inflection class. It is not obvious that this is correct, e.g. it is not obvious that deponent verbs in Greek belonged to a separate part of speech from other verbs. Pluralia tantum words like scissors and trousers are another example, since it is not clear that they belong to a separate part of speech from other nouns. Yet another example of a set of words that cannot plausibly be assigned to a separate category comes from Russian. Halle (1973: 7-8) says there are about a hundred verbs, all in a particular conjugation class, which lack first person singular non-past forms. It is unclear what the status of this gap is; it may be semantically or pragmatically based (some of the glosses are 'I conquer', 'I talk rudely', 'I behave foolishly'). According to Halle, "Russian grammar books frequently note that such forms… 'do not exist', or 'are not used', or 'are avoided'." Perhaps this is more of a sociolinguistic issue. Jensen (1990: 117-119) discusses some other defective paradigms, although he admits that his Latin examples are suspect: the defective paradigm is based on the corpus of Latin literature, and it may be that the corpus, not the paradigm, is defective. Jensen also lists as examples a few French verbs which lack certain forms: "cloré ['to close, enclose']… lacks the passé simple and the first and second persons plural of the present. Gésir ['to lie'] lacks all tenses but the present and imperfect indicative, and lacks the first and second persons singular of the present." He notes that synonyms supply the missing forms, so these gaps probably cannot be explained on semantic or pragmatic grounds. Jensen also gives as examples English modal verbs, which lack participle and 'infinitive' (to V) forms. In this case, the customary solution is to create a separate part of speech (modals), as a subclass of the category Verb.There are at least two verbs in English with defective paradigms: sight-see (*sight-sees, *sight-saw, sight-seen-but sight-seeing), and beware (which occurs only in this base form. Another puzzle with respect to defective paradigms, is the fact that while the singular of pluralia tantum words is ungrammatical in isolation, they are found in compounds: scissor-handle and trouser-leg. It is not clear how a defective distribution of certain elements of the paradigm should be handled. Matthews (1972a: 197, fn. 2) suggests that defective paradigms be handled in the syntax, although it is unclear how this would work.
     /// </summary>
-    [ForeignKey("Possibility_EmptyParadigmCells_Guid")]
     public List<LfFsFeatStruc> EmptyParadigmCells { get; set; }
 
     /// <summary>
@@ -3945,7 +3869,6 @@ public class LfPartOfSpeech : LfPossibility
     /// <remarks>
     /// vAllRulesOfReferral: virtual attribute = [my RulesOfReferral, vAllRulesOfReferral of my owner].
     /// </remarks>
-    [ForeignKey("Possibility_RulesOfReferral_Guid")]
     public List<LfMoReferralRule> RulesOfReferral { get; set; }
 
     /// <summary>
@@ -3954,13 +3877,11 @@ public class LfPartOfSpeech : LfPossibility
     /// <remarks>
     /// vAllSuperInflectionClasses: a virtual attr = [vAllSubInflectionClasses of my owner, vAllSuperInflectionClasses of my owner]. This gives the inflection classes defined on super-categories of this part of speech. This does not include any inflection classes defined on this part of speech.vAllSubInflectionClasses: a virtual attr = [my InflectionClasses, vAllSubInflectionClasses of my InflectionClasses]. Note that this does not include any inflection classes belonging to sub-types of this part of speech. For example, the vAllSubInflectionClasses of 'verb' would not include any special inflection classes found with transitive verbs.vAllInflectionClasses: a virtual attr = [my vAllSuperInflectionClasses, my vAllSubInflectionClasses]. This includes all the inflection classes relevant to this part of speech.There is no provision here for overriding the inflection classes of a super-category, although this could probably be done by assigning the same name to two inflection classes, then taking the 'unique' over the names. But it's not clear that this would ever be necessary or desirable. It's not even clear that combining inherited and owned inflection classes is a good idea, but given that (1) we will certainly want parts of speech to be able to inherit inflection classes (so e.g. we can define inflection classes for verbs, and let transitive and intransitive verbs inherit it), and that (2) we must allow parts of speech to own inflection classes, it's not clear what else we could do.
     /// </remarks>
-    [ForeignKey("Possibility_InflectionClasses_Guid")]
     public List<LfMoInflClass> InflectionClasses { get; set; }
 
     /// <summary>
     /// owns an ordered seq of MoInflAffixTemplates, which define how affixation (but not choice of stems) works for this part of speech. The reason this is an ordered sequence attribute, rather than atomic, is to allow the user to capture the fact that the number of slots can be different for different parts of the paradigm (infinitives, for example, or tenses which are partly inflected on the main verb and partly on an auxiliary verb). The order of templates in this attribute is relevant: the first MoInflAffixTemplates whose Region attr is a subset of the inflectional features to be realized on the word, is chosen.Note the assumption here that all the words belonging to a single part of speech have fundamentally the same paradigm (and therefore the same set of affix templates), and that differences are accounted by membership in distinct MoInflectionClasses (Carstairs 1987: 10-11, Carstairs-McCarthy 1998b: 324). The fact that in languages which mark the verb for agreement with both subject and object, transitive verbs have different paradigms from intransitive verbs (transitives usually have an additional slot for object marking-or for subject marking, in the case of ergative languages), might seem to be a counterexample. The reason that is not a counterexample, is that transitive and intransitive verbs can be treated as separate parts of speech using the inheritance hierarchy.
     /// </summary>
-    [ForeignKey("Possibility_AffixTemplates_Guid")]
     public List<LfMoInflAffixTemplate> AffixTemplates { get; set; }
 
     /// <summary>
@@ -3969,7 +3890,6 @@ public class LfPartOfSpeech : LfPossibility
     /// <remarks>
     /// vAllAffixSlots: virtual attribute = [my affixSlots, allAffixSlots of my owner]. While there is no explicit provision for a category to override an affix slot inherited from its owner, an affix slot is effectively overridden if it is not used. For example, in Tzeltal (as discussed above), nouns and transitive verbs use the same prefix slot, which could be modeled by placing the ownership of this prefix slot at a point in the category hierarchy above noun and transitive verb. Because the prefix slot is stored there, it would also be inherited by intransitive verbs, which do not mark person with prefixes. But the fact that intransitive verbs do not use that slot is captured by the fact that the affix template for intransitive verbs does not refer to the prefix slot.
     /// </remarks>
-    [ForeignKey("Possibility_AffixSlots_Guid")]
     public List<LfMoInflAffixSlot> AffixSlots { get; set; }
 
     /// <summary>
@@ -3978,7 +3898,6 @@ public class LfPartOfSpeech : LfPossibility
     /// <remarks>
     /// vAllStemNames: a virtual attr gives all the stem names relevant for this part of speech. Defined like the following (see also discussion of this attr under MoInflectionClass.) [my StemNames, selectIf({|SN| not of includes(name of SN) over name of my StemNames}) of vAllStemNames of my owner]
     /// </remarks>
-    [ForeignKey("Possibility_StemNames_Guid")]
     public List<LfMoStemName> StemNames { get; set; }
 
     /// <summary>
@@ -4006,7 +3925,6 @@ public class LfPartOfSpeech : LfPossibility
     /// <remarks>
     /// vAllReferenceForms: a virtual attr =[my ReferenceForms, vAllReferenceForms of my owner].
     /// </remarks>
-    [ForeignKey("Possibility_ReferenceForms_Guid")]
     public List<LfFsFeatStruc> ReferenceForms { get; set; }
 
     /// <summary>
@@ -4034,7 +3952,6 @@ public class LfReversalIndex : LfMajorObject
     public Guid PartsOfSpeechGuid { get; set; }
     public LfPossibilityList PartsOfSpeech { get; set; }
 
-    [ForeignKey("ReversalIndex_Entries_Guid")]
     public List<LfReversalIndexEntry> Entries { get; set; }
 
     public string WritingSystem { get; set; }
@@ -4044,7 +3961,6 @@ public class LfReversalIndex : LfMajorObject
 [Table("ReversalIndexEntry")]
 public class LfReversalIndexEntry : LfObject
 {
-    [ForeignKey("ReversalIndexEntry_Subentries_Guid")]
     public List<LfReversalIndexEntry> Subentries { get; set; }
 
     public Guid PartOfSpeechGuid { get; set; }
@@ -4116,10 +4032,8 @@ public class LfWfiAnalysis : LfObject
     public Guid DerivationGuid { get; set; }
     public LfMoDeriv Derivation { get; set; }
 
-    [ForeignKey("WfiAnalysis_Meanings_Guid")]
     public List<LfWfiGloss> Meanings { get; set; }
 
-    [ForeignKey("WfiAnalysis_MorphBundles_Guid")]
     public List<LfWfiMorphBundle> MorphBundles { get; set; }
 
     /// <summary>
@@ -4160,7 +4074,6 @@ public class LfWfiWordform : LfObject
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Form { get; set; }
 
-    [ForeignKey("WfiWordform_Analyses_Guid")]
     public List<LfWfiAnalysis> Analyses { get; set; }
 
     /// <summary>
@@ -4195,7 +4108,6 @@ public class LfWordFormLookup : LfObject
 [Table("WordformLookupList")]
 public class LfWordformLookupList : LfMajorObject
 {
-    [ForeignKey("WordformLookupList_Wordforms_Guid")]
     public List<LfWordFormLookup> Wordforms { get; set; }
 
     public string WritingSystem { get; set; }
@@ -4346,7 +4258,6 @@ public class LfMoInflTemplateApp : LfMoDerivTrace
     /// An alternative to having this attr and a separate class for slot applications, would be to have an attr here for inflectional affix applications themselves, bypassing the "middleman." The distinction between slot applications and the attachment of a particular affix belonging to a slot is that if no affix in a particular slot applies, the effect is that of an implicit zero affix. Under this alternative, there would thus be no indication that the slot in question had been tried. It seems better to have this attr record the slot applications, on the assumption that one wants to know if there was an implicit zero affix.
     /// I have defined this as an ordered seq, but it would be possible to derive the ordering from the order of the MoInflAffixSlots in the Slots attr of the MoInflAffixTemplate of this template application. However, this would not work if the user had changed the order of slots since this derivation was created.
     /// </summary>
-    [ForeignKey("MoDerivTrace_SlotApps_Guid")]
     public List<LfMoInflAffixSlotApp> SlotApps { get; set; }
 
 }
@@ -4384,14 +4295,12 @@ public class LfMoStratumApp : LfMoDerivTrace
     /// <summary>
     /// owns an ordered seq of MoCompoundRuleApp, representing the application of compound rules belonging to this stratum. The order is the order of application in derivation (which may be the reverse of the order in parsing).
     /// </summary>
-    [ForeignKey("MoDerivTrace_CompoundRuleApps_Guid")]
     public List<LfMoCompoundRuleApp> CompoundRuleApps { get; set; }
 
     /// <summary>
     /// Owns an ordered seq of MoDerivationalAffixApp, representing the attachment of derivational affixes belonging to this stratum. The order is the order of application in derivation (which may be the reverse of the order in parsing).
     /// Changed from DerivationalAffixApps.
     /// </summary>
-    [ForeignKey("MoDerivTrace_DerivAffApp_Guid")]
     public List<LfMoDerivAffApp> DerivAffApp { get; set; }
 
     /// <summary>
@@ -4403,7 +4312,6 @@ public class LfMoStratumApp : LfMoDerivTrace
     /// <summary>
     /// owns an ordered seq of MoPhonolRuleApp, representing the application of the phonological rules of this stratum. Note that the fact that this attr belongs to the MoStratumApp precludes modeling cyclic application. That restriction could easily be lifted. The order is the order of application in derivation (which may be the reverse of the order in parsing).
     /// </summary>
-    [ForeignKey("MoDerivTrace_PRuleApps_Guid")]
     public List<LfMoPhonolRuleApp> PRuleApps { get; set; }
 
 }
@@ -4516,13 +4424,11 @@ public class LfPhPhonemeSet : LfObject
     /// <summary>
     /// collection seq of PhPhoneme.
     /// </summary>
-    [ForeignKey("PhPhonemeSet_Phonemes_Guid")]
     public List<LfPhPhoneme> Phonemes { get; set; }
 
     /// <summary>
     /// collection seq of PhBdryMarker
     /// </summary>
-    [ForeignKey("PhPhonemeSet_BoundaryMarkers_Guid")]
     public List<LfPhBdryMarker> BoundaryMarkers { get; set; }
 
     [Column(TypeName = "jsonb")]
@@ -4548,7 +4454,6 @@ public abstract class LfPhTerminalUnit : LfObject
     /// <remarks>
     /// There is not guaranteed to be a unique representation of a phoneme in a single encoding. For example, in Spanish the strings 'c' (in certain contexts), 'qu', and 'k' (in a handful of words) represent the /k/ phoneme. One implication of this is that the translation from phoneme to string will not be unique: the translation may be context sensitive, as in Spanish, or it could be indeterminate, as in English orthography. A work-around for the situation in which the translation is context-sensitive, is to treat the two strings as if they were two different phonemes (which will both happen to belong to the same natural classes, i.e. PhNCSegments). Capitalization provides another example of this problem, since a single phoneme will be represented by both upper- and lower-case letters.Likewise, there is not guaranteed to be a unique phoneme for a given string. There are at least two ways this form of uniqueness might be violated. First, a single string might stand for two or more phonemes, depending on the context. For example, in (Latin American) Spanish the string 'c' represents the phoneme /s/ before a front vowel, and the phoneme /k/ elsewhere. Second, a sequence of letters might be ambiguous in terms of its division into strings representing phonemes. For example, in English the letters 'sh' can represent a single phonological unit, as in the word 'ship'; or they may represent two units, as in 'mishap'.Provided the departures from biuniqueness are predictable (as in Spanish, but not in English), it is possible to provide a fairly simple translator between the two representations (a finite state transducer, for example). Conceptually, it would handle simple rewrite rules like the following:'c' /s/ / __ i, e /k/ / __'qu' /k/ __ i, e'z' /s/ I have not specified in these examples whether the symbols in the environments are phonemes or strings. Note that it is necessary to define the positions in which 'qu' represents /k/ (or alternatively, where 'c' represents /k/), in order to preserve biuniqueness. (Otherwise, the translation of /k/ would be ambiguous.) The translation between /s/ and 'z', on the other hand, does not require that an environment be stated. The general guideline is that there can be only one 'elsewhere' case for each translation, in both directions.Concerning the translation between phonemes and strings, see also http://intranet.sil.org/softwaredev/Projects/CELLARII/Design/ConceptualModel/Encodings/CLR2_EncodingRequirements.html - RcmEnc5.3. (This document is dated 27 January, 1998. Is there a more recent document that covers this?)
     /// </remarks>
-    [ForeignKey("PhTerminalUnit_Codes_Guid")]
     public List<LfPhCode> Codes { get; set; }
 
 }
@@ -4671,22 +4576,18 @@ public class LfPhPhonData : LfObject
     /// <summary>
     /// owns a collection of PhPhonemeSets, describing the phonemic inventory of the language. The reason for allowing this to be a collection (rather than atomic) is to allow for phonological descriptions at multiple levels (strata),
     /// </summary>
-    [ForeignKey("PhPhonData_PhonemeSets_Guid")]
     public List<LfPhPhonemeSet> PhonemeSets { get; set; }
 
-    [ForeignKey("PhPhonData_Environments_Guid")]
     public List<LfPhEnvironment> Environments { get; set; }
 
     /// <summary>
     /// Change this here.
     /// </summary>
-    [ForeignKey("PhPhonData_NaturalClasses_Guid")]
     public List<LfPhNaturalClass> NaturalClasses { get; set; }
 
     /// <summary>
     /// Change this here.
     /// </summary>
-    [ForeignKey("PhPhonData_Contexts_Guid")]
     public List<LfPhContextOrVar> Contexts { get; set; }
 
     /// <summary>
@@ -4695,7 +4596,6 @@ public class LfPhPhonData : LfObject
     /// The user need never see these as a list to be edited or maintained by hand.
     /// The UI can show them as greek letters in phonological rule displays.
     /// </summary>
-    [ForeignKey("PhPhonData_FeatConstraints_Guid")]
     public List<LfPhFeatureConstraint> FeatConstraints { get; set; }
 
     /// <summary>
@@ -4709,7 +4609,6 @@ public class LfPhPhonData : LfObject
     /// <summary>
     /// These are the ordered sequence of phonological rules. They are given in the order in which they are to be applied.
     /// </summary>
-    [ForeignKey("PhPhonData_PhonRules_Guid")]
     public List<LfPhSegmentRule> PhonRules { get; set; }
 
 }
@@ -4746,7 +4645,6 @@ public class LfMoDeriv : LfObject
     /// <summary>
     /// owns an ordered seq of MoStratumApp structures, representing the sequence of applications of strata (i.e. of the affixes and phonological rules of those strata) to an underlying form. The order is from the deepest stratum to the shallowest.
     /// </summary>
-    [ForeignKey("MoDeriv_StratumApps_Guid")]
     public List<LfMoStratumApp> StratumApps { get; set; }
 
 }
@@ -4851,7 +4749,6 @@ public class LfMoCoordinateCompound : LfMoBinaryCompoundRule
 [Table("MoGlossSystem")]
 public class LfMoGlossSystem : LfObject
 {
-    [ForeignKey("MoGlossSystem_Glosses_Guid")]
     public List<LfMoGlossItem> Glosses { get; set; }
 
 }
@@ -4902,7 +4799,6 @@ public class LfMoGlossItem : LfObject
     public Guid FeatStructFragGuid { get; set; }
     public LfFsFeatStruc FeatStructFrag { get; set; }
 
-    [ForeignKey("MoGlossItem_GlossItems_Guid")]
     public List<LfMoGlossItem> GlossItems { get; set; }
 
     /// <summary>
@@ -4932,7 +4828,6 @@ public class LfMoAdhocProhibGr : LfMoAdhocProhib
     [Column(TypeName = "jsonb")]
     public List<LfWsTsString> Description { get; set; }
 
-    [ForeignKey("MoAdhocProhib_Members_Guid")]
     public List<LfMoAdhocProhib> Members { get; set; }
 
 }
@@ -5087,7 +4982,6 @@ public class LfLexRefType : LfPossibility
     /// <summary>
     /// This holds all of the references of this type.
     /// </summary>
-    [ForeignKey("Possibility_Members_Guid")]
     public List<LfLexReference> Members { get; set; }
 
     /// <summary>
@@ -5161,7 +5055,6 @@ public class LfDsConstChart : LfDsChart
     /// <summary>
     /// The main content of the chart. Each ConstChartRow represents a row/clause.
     /// </summary>
-    [ForeignKey("DsChart_Rows_Guid")]
     public List<LfConstChartRow> Rows { get; set; }
 
 }
@@ -5179,7 +5072,6 @@ public class LfDsDiscourseData : LfObject
     /// <summary>
     /// Actual instances of discourse charts (tentatively of all types, even though we currently only have one type: Constituent Chart).
     /// </summary>
-    [ForeignKey("DsDiscourseData_Charts_Guid")]
     public List<LfDsChart> Charts { get; set; }
 
     /// <summary>
@@ -5196,7 +5088,6 @@ public class LfChkTerm : LfPossibility
     /// <summary>
     /// List of references where this checking item needs to be checked. E.g., a list of scripture references where a specific sense of a key term needs to be checked.
     /// </summary>
-    [ForeignKey("Possibility_Occurrences_Guid")]
     public List<LfChkRef> Occurrences { get; set; }
 
     /// <summary>
@@ -5208,7 +5099,6 @@ public class LfChkTerm : LfPossibility
     /// <summary>
     /// Represents the renderings (i.e. vernacular equivalents) for a term. A ChkRendering is added whenever a rendering is ascribed to a ChkRef for which a ChkRendering does not already exist in this collection.
     /// </summary>
-    [ForeignKey("Possibility_Renderings_Guid")]
     public List<LfChkRendering> Renderings { get; set; }
 
     /// <summary>
@@ -5336,7 +5226,6 @@ public class LfPhSegmentRule : LfObject
     /// <summary>
     /// For regular rules, this is the structural description of the rule (i.e the A in the general formula of A -> B / C _ D). If A is missing, then this is an insertion (epenthetic) rule. For metathesis rules, this is the structural description (i.e. the input) of the rule. Each ordered PhSimpleContext corresponds to a number (the index) that can be referred to in the structural change attribute.
     /// </summary>
-    [ForeignKey("PhSegmentRule_StrucDesc_Guid")]
     public List<LfPhSimpleContext> StrucDesc { get; set; }
 
     /// <summary>
@@ -5353,7 +5242,6 @@ public class LfPhRegularRule : LfPhSegmentRule
     /// <summary>
     /// The right hand sides of the rule (i.e. the B, C, and D of the general formula (A -> B / C _ D).
     /// </summary>
-    [ForeignKey("PhSegmentRule_RightHandSides_Guid")]
     public List<LfPhSegRuleRHS> RightHandSides { get; set; }
 
 }
@@ -5387,7 +5275,6 @@ public class LfPhSegRuleRHS : LfObject
     /// <summary>
     /// The structural change (i.e. the output) of the rule. If this is missing, the rule is a deletion rule
     /// </summary>
-    [ForeignKey("PhSegRuleRHS_StrucChange_Guid")]
     public List<LfPhSimpleContext> StrucChange { get; set; }
 
     /// <summary>
@@ -5485,7 +5372,6 @@ public class LfLexExtendedNote : LfObject
     /// These are examples that illustrate the discussion.
     /// The LexExample model includes Translation Type and Reference, but they will be empty and not shown.
     /// </summary>
-    [ForeignKey("LexExtendedNote_Examples_Guid")]
     public List<LfLexExampleSentence> Examples { get; set; }
 
 }
@@ -5558,10 +5444,8 @@ public class LfLangProject : LfProject
     /// <summary>
     /// Styles for use in the Data Notebook and Lexical database.
     /// </summary>
-    [ForeignKey("Project_Styles_Guid")]
     public List<LfStStyle> Styles { get; set; }
 
-    [ForeignKey("Project_Filters_Guid")]
     public List<LfFilter> Filters { get; set; }
 
     public Guid ConfidenceLevelsGuid { get; set; }
@@ -5600,13 +5484,11 @@ public class LfLangProject : LfProject
     public Guid PositionsGuid { get; set; }
     public LfPossibilityList Positions { get; set; }
 
-    [ForeignKey("Project_Overlays_Guid")]
     public List<LfOverlay> Overlays { get; set; }
 
     /// <summary>
     /// At this point, in time (Jan, 2002) CmAnalyzingAgents are used only by MoMorphological data. Refer to CmAnalyzingAgent for more info.
     /// </summary>
-    [ForeignKey("Project_AnalyzingAgents_Guid")]
     public List<LfAgent> AnalyzingAgents { get; set; }
 
     public Guid TranslatedScriptureGuid { get; set; }
@@ -5623,13 +5505,10 @@ public class LfLangProject : LfProject
     /// </summary>
     public string LinkedFilesRootDir { get; set; }
 
-    [ForeignKey("Project_Annotations_Guid")]
     public List<LfAnnotation> Annotations { get; set; }
 
-    [ForeignKey("Project_UserAccounts_Guid")]
     public List<LfUserConfigAcct> UserAccounts { get; set; }
 
-    [ForeignKey("Project_ActivatedFeatures_Guid")]
     public List<LfUserAppFeatAct> ActivatedFeatures { get; set; }
 
     /// <summary>
@@ -5638,7 +5517,6 @@ public class LfLangProject : LfProject
     public Guid AnnotationDefsGuid { get; set; }
     public LfPossibilityList AnnotationDefs { get; set; }
 
-    [ForeignKey("Project_Pictures_Guid")]
     public List<LfFolder> Pictures { get; set; }
 
     public Guid SemanticDomainListGuid { get; set; }
@@ -5647,13 +5525,11 @@ public class LfLangProject : LfProject
     /// <summary>
     /// The CheckLists will be a collection of CmPossibilityList objects, each with a unique identifier. For example, one CmPossibilityList will be called KeyTerms which will represent a hierarchical list of Biblical key terms. The possibility lists can be imported programmatically from external files. Each CmPossibilityList will hold ChkItem objects (derived from CmPossibility).
     /// </summary>
-    [ForeignKey("Project_CheckLists_Guid")]
     public List<LfPossibilityList> CheckLists { get; set; }
 
     /// <summary>
     /// This contains a list of folders holding media file objects. For now, we will have one CmFolder called "Local Media" that holds all media.
     /// </summary>
-    [ForeignKey("Project_Media_Guid")]
     public List<LfFolder> Media { get; set; }
 
     /// <summary>
