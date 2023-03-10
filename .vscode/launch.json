@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/transform/bin/Debug/net7.0/transform.dll",
+            "program": "${workspaceFolder}/SIL.LCModel.EFCore.Migration/bin/Debug/net7.0/SIL.LCModel.EFCore.Migration.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

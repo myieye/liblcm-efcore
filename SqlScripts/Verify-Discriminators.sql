@@ -1,2 +1,2 @@
-SELECT DISTINCT("Discriminator") FROM "Possibilities";
-SELECT COUNT(*) FROM "Possibilities";
+SELECT DISTINCT("Discriminator") FROM "Possibilitys";
+SELECT COUNT(*) FROM "Possibilitys";

@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "extract", "extract\extract.csproj", "{25DC5BF2-7574-4277-8447-522C2F58A618}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibLcmCacheLoader", "LibLcmCacheLoader\LibLcmCacheLoader.csproj", "{25DC5BF2-7574-4277-8447-522C2F58A618}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "transform", "transform\transform.csproj", "{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIL.LCModel.EFCore.Migration", "SIL.LCModel.EFCore.Migration\SIL.LCModel.EFCore.Migration.csproj", "{A9CE6F4B-D3C9-4E1D-864A-341888855D6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCModel", "LfSync.Data\LfSync.Data.csproj", "{41B92E0D-C291-418C-B36F-86E77105C7BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIL.LCModel.EFCore", "SIL.LCModel.EFCore\SIL.LCModel.EFCore.csproj", "{41B92E0D-C291-418C-B36F-86E77105C7BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LfSync.LcmModelGenerator", "LfSync.LcmModelGenerator\LfSync.LcmModelGenerator.csproj", "{B4B4A641-BC64-4597-A772-634816B6D6E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIL.LCModel.EFCore.Generator", "SIL.LCModel.EFCore.Generator\SIL.LCModel.EFCore.Generator.csproj", "{B4B4A641-BC64-4597-A772-634816B6D6E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
