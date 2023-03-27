@@ -45,6 +45,7 @@ public class CustomFieldService
 
     private Dictionary<int, List<CustomFieldConfig>> BuildCustomFieldConfigs()
     {
+        // IFwMetaDataCacheManagedInternal.GetCustomFields() is internal and would presumably be a lot prettier here
         return classesWithCustomFields.ToDictionary(classId => classId, classId => fwData
             .GetFields(classId, false, (int)CellarPropertyTypeFilter.All)
             .Where(fwData.IsCustom)
