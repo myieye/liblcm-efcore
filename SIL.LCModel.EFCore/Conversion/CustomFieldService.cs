@@ -1,17 +1,27 @@
-using SIL.LCModel;
 using SIL.LCModel.Application;
 using SIL.LCModel.Core.Cellar;
 using SIL.LCModel.EFCore.Model;
 using SIL.LCModel.Infrastructure;
 
-namespace SIL.LCModel.EFCore.Migration;
+namespace SIL.LCModel.EFCore.Conversion;
 
 public class CustomFieldService
 {
     private readonly LcmCache cache;
-    private readonly IFwMetaDataCacheManaged fwData;
-    private readonly ISilDataAccessManaged silData;
-    private readonly Dictionary<int, List<CustomFieldConfig>> customFieldConfigsByClass;
+    private IFwMetaDataCacheManaged FwData { get => cache.ServiceLocator.MetaDataCache; }
+    private ISilDataAccessManaged SilData { get => (ISilDataAccessManaged)cache.MainCacheAccessor; }
+    private Dictionary<int, List<CustomFieldConfig>> customFieldConfigsByClass;
+    private Dictionary<int, List<CustomFieldConfig>> CustomFieldConfigsByClass
+    {
+        get
+        {
+            if (customFieldConfigsByClass == null)
+            {
+                customFieldConfigsByClass = BuildCustomFieldConfigs();
+            }
+            return customFieldConfigsByClass;
+        }
+    }
     private static CustomFieldService? _instance;
     private readonly ISet<int> classesWithCustomFields = new HashSet<int>
     { LexEntryTags.kClassId, LexSenseTags.kClassId, LexExampleSentenceTags.kClassId, MoFormTags.kClassId };
@@ -25,36 +35,33 @@ public class CustomFieldService
         return _instance;
     }
 
-    internal List<CustomFieldConfig> GetCustomFieldConfigs()
+    public List<CustomFieldConfig> GetCustomFieldConfigs()
     {
-        return customFieldConfigsByClass.Values.SelectMany(x => x).ToList();
+        return CustomFieldConfigsByClass.Values.SelectMany(x => x).ToList();
     }
 
     internal List<CustomFieldConfig> GetCustomFieldConfigsForClass(int classId)
     {
-        return customFieldConfigsByClass[classId];
+        return CustomFieldConfigsByClass[classId];
     }
 
     private CustomFieldService(LcmCache cache)
     {
         this.cache = cache;
-        fwData = cache.ServiceLocator.MetaDataCache;
-        silData = (ISilDataAccessManaged)cache.MainCacheAccessor;
-        customFieldConfigsByClass = BuildCustomFieldConfigs();
     }
 
     private Dictionary<int, List<CustomFieldConfig>> BuildCustomFieldConfigs()
     {
         // IFwMetaDataCacheManagedInternal.GetCustomFields() is internal and would presumably be a lot prettier here
-        return classesWithCustomFields.ToDictionary(classId => classId, classId => fwData
+        return classesWithCustomFields.ToDictionary(classId => classId, classId => FwData
             .GetFields(classId, false, (int)CellarPropertyTypeFilter.All)
-            .Where(fwData.IsCustom)
+            .Where(FwData.IsCustom)
             .Select(fieldId => new CustomFieldConfig
             {
                 Id = fieldId,
-                Name = fwData.GetFieldName(fieldId),
-                Description = fwData.GetFieldLabel(fieldId),
-                Type = (CellarPropertyType)fwData.GetFieldType(fieldId) switch
+                Name = FwData.GetFieldName(fieldId),
+                Description = FwData.GetFieldLabel(fieldId),
+                Type = (CellarPropertyType)FwData.GetFieldType(fieldId) switch
                 {
                     CellarPropertyType.Integer => CustomFieldType.Integer,
                     CellarPropertyType.GenDate => CustomFieldType.Date,
@@ -63,7 +70,7 @@ public class CustomFieldService
                     CellarPropertyType.OwningAtomic => CustomFieldType.Multiparagraph,
                     CellarPropertyType.ReferenceAtomic => CustomFieldType.SinglePossibility,
                     CellarPropertyType.ReferenceCollection => CustomFieldType.MultiPossibility,
-                    _ => throw new ArgumentOutOfRangeException($"Unexpected custom field CellarPropertyType: {fwData.GetFieldType(fieldId)}."),
+                    _ => throw new ArgumentOutOfRangeException($"Unexpected custom field CellarPropertyType: {FwData.GetFieldType(fieldId)}."),
                 },
             }).ToList());
     }
@@ -78,7 +85,7 @@ public class CustomFieldService
             // But then where should the property be defined?
             return new List<CustomFieldValue>();
         }
-        var customFieldConfigs = customFieldConfigsByClass[classId];
+        var customFieldConfigs = CustomFieldConfigsByClass[classId];
         return customFieldConfigs
             .Select(config => GetCustomFieldValue(obj, config, context))
             .Where(value => value != null)
@@ -90,36 +97,36 @@ public class CustomFieldService
         switch (config.Type)
         {
             case CustomFieldType.Integer:
-                return NullIfEmpty(silData.get_IntProp(obj.Hvo, config.Id), (value) => new IntCustomFieldValue
+                return NullIfEmpty(SilData.get_IntProp(obj.Hvo, config.Id), (value) => new IntCustomFieldValue
                 {
                     ConfigId = config.Id,
                     Config = config,
                     Value = value,
                 });
             case CustomFieldType.SingleString:
-                return NullIfEmpty(context.Mapper.Map<LfTsString>(silData.get_StringProp(obj.Hvo, config.Id)), (value) => new StringCustomFieldValue
+                return NullIfEmpty(context.Mapper.Map<LfTsString>(SilData.get_StringProp(obj.Hvo, config.Id)), (value) => new StringCustomFieldValue
                 {
                     ConfigId = config.Id,
                     Config = config,
                     Value = value,
                 });
             case CustomFieldType.Date:
-                return NullIfEmpty(context.Mapper.Map<GenDate>(silData.get_GenDateProp(obj.Hvo, config.Id)), (value) => new GenDateCustomFieldValue
+                return NullIfEmpty(context.Mapper.Map<GenDate>(SilData.get_GenDateProp(obj.Hvo, config.Id)), (value) => new GenDateCustomFieldValue
                 {
                     ConfigId = config.Id,
                     Config = config,
                     Value = value,
                 });
             case CustomFieldType.MultiString:
-                return NullIfEmpty(context.Mapper.Map<List<LfWsTsString>>(silData.get_MultiStringProp(obj.Hvo, config.Id)), (value) => new WsTsStringCustomFieldValue
+                return NullIfEmpty(context.Mapper.Map<List<LfWsTsString>>(SilData.get_MultiStringProp(obj.Hvo, config.Id)), (value) => new WsTsStringCustomFieldValue
                 {
                     ConfigId = config.Id,
                     Config = config,
                     Value = value,
                 });
             case CustomFieldType.Multiparagraph:
-                var textId = silData.get_ObjectProp(obj.Hvo, config.Id);
-                if (textId == 0 || !silData.get_IsValidObject(textId))
+                var textId = SilData.get_ObjectProp(obj.Hvo, config.Id);
+                if (textId == 0 || !SilData.get_IsValidObject(textId))
                 {
                     return null;
                 }
@@ -132,8 +139,8 @@ public class CustomFieldService
                     StTextGuid = stText.Guid,
                 });
             case CustomFieldType.SinglePossibility:
-                var possibilityId = silData.get_ObjectProp(obj.Hvo, config.Id);
-                if (possibilityId == 0 || !silData.get_IsValidObject(possibilityId))
+                var possibilityId = SilData.get_ObjectProp(obj.Hvo, config.Id);
+                if (possibilityId == 0 || !SilData.get_IsValidObject(possibilityId))
                 {
                     return null;
                 }
@@ -146,7 +153,7 @@ public class CustomFieldService
                     PossibilityGuid = value.Guid,
                 });
             case CustomFieldType.MultiPossibility:
-                var possibilityIds = silData.VecProp(obj.Hvo, config.Id);
+                var possibilityIds = SilData.VecProp(obj.Hvo, config.Id);
                 var possibilities = possibilityIds.Select(id => context.Mapper.Map<LfPossibility>(cache.GetAtomicPropObject(id))).ToList();
                 return NullIfEmpty(possibilities, (value) => new PossibilityListCustomFieldValue
                 {

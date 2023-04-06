@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SIL.LCModel" Version="10.2.0-beta0068" />
+    <!-- <PackageReference Include="SIL.LCModel" Version="10.2.0-beta0068" /> -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="D:\code\liblcm\src\SIL.LCModel\SIL.LCModel.csproj" />
+    <ProjectReference Include="D:\code\liblcm\src\SIL.LCModel\SIL.LCModel.Utils.csproj" />
+    <ProjectReference Include="D:\code\liblcm\src\SIL.LCModel\SIL.LCModel.Core.csproj" />
   </ItemGroup>
 
 </Project>

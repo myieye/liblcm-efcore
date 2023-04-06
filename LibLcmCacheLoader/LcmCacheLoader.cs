@@ -11,12 +11,13 @@ public class LcmCacheLoader : IDisposable
     public LcmCacheLoader(string projectName)
     {
         _projectName = projectName;
+		Watch.Time("Icu.Wrapper.Init()", () => Icu.Wrapper.Init());
+		Watch.Time("Sldr.Initialize()", () => Sldr.Initialize());
     }
 
-    public LcmCache ExtractProject()
+    public LcmCache ExtractProject(Type? customBackendProvider = null)
     {
-        Sldr.Initialize();
-        var cache = LoadCache(_projectName);
+        var cache = LoadCache(_projectName, customBackendProvider);
         if (cache == null)
         {
             throw new InvalidOperationException("Failed to load project.");
@@ -24,19 +25,20 @@ public class LcmCacheLoader : IDisposable
         return cache;
     }
 
-    private static LcmCache? LoadCache(string projectName)
+    private static LcmCache? LoadCache(string projectName, Type? customBackendProvider)
     {
         var progress = new LcmThreadedProgress();
         var lcmUi = new LfLcmUi(new SingleThreadedSynchronizeInvoke());
         var projectDir = new LcmDirectories("C:\\ProgramData\\SIL\\FieldWorks\\Projects", "C:\\ProgramData\\SIL\\FieldWorks\\Templates");
         var projectId = new LcmProjectIdentifier(projectDir, projectName);
-        return LcmCache.CreateCacheFromExistingData(
-            projectId, Thread.CurrentThread.CurrentUICulture.Name, lcmUi,
-            projectId.LcmDirectories, new LcmSettings(), progress);
+        return Watch.Time("LcmCache.CreateCacheFromExistingData()", () => LcmCache.CreateCacheFromExistingData(
+            projectId, null /* Thread.CurrentThread.CurrentUICulture.Name */, lcmUi,
+            projectId.LcmDirectories, new LcmSettings(), progress, customBackendProvider));
     }
 
     public void Dispose()
     {
-        Sldr.Cleanup();
+		Icu.Wrapper.Cleanup();
+		Sldr.Cleanup();
     }
 }

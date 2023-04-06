@@ -13,7 +13,8 @@ public partial class LcmDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         options.UseNpgsql("Host=localhost; Database=liblcm; Username=postgres; Password=postgres; Include Error Detail=true")
-            .EnableSensitiveDataLogging();
+            .EnableSensitiveDataLogging()
+            .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name });
     }
 
     partial void OnModelCreating_Generated(ModelBuilder builder);
